@@ -1,8 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ court.name }}</title>
 </head>
 <body>
@@ -17,7 +15,7 @@
     </ul>
     <p><strong>Location:</strong> {{ court.address }}</p>
 
-    <a href="/new_reservation/{{ court.id }}">New reservation</a>
+    <a href="/reserve/{{ court_id }}">New reservation</a>
 
     <a href="/">Back to Courts List</a>
 </body>
