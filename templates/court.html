@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ court.name }}</title>
+</head>
+<body>
+    <h1>{{ court.name }}</h1>
+    <h1>List of reservations</h1>
+    <ul>
+        {% for reservation in reservations %}
+            <li>{{ reservation.res_date }}</li>
+            <li>{{ reservation.res_start }}</li>
+            <li>{{ reservation.res_end }}</li>
+        {% endfor %}
+    </ul>
+    <p><strong>Location:</strong> {{ court.address }}</p>
+
+    <a href="/new_reservation/{{ court.id }}">New reservation</a>
+
+    <a href="/">Back to Courts List</a>
+</body>
+</html>
