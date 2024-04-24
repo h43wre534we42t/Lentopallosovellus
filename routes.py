@@ -1,11 +1,11 @@
 from app import app
-from flask import redirect, render_template, request
+from db import db
+from flask import redirect, render_template, request, session
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.sql import text
 from os import getenv
 
-app.config["SQLALCHEMY_DATABASE_URI"] = getenv("DATABASE_URL")
-db = SQLAlchemy(app)
+app.secret_key = getenv("SECRET_KEY")
 
 @app.route("/")
 def index():
@@ -47,4 +47,17 @@ def reservesend(court_id):
     sql = text("INSERT INTO reserved (res_date, res_start, res_end, court_id, reservee) VALUES (:res_date, :res_start, :res_end, :court_id, :reservee)")
     db.session.execute(sql, {"res_date":res_date, "res_start":res_start, "res_end":res_end, "reservee":reservee, "court_id":court_id})
     db.session.commit()
+    return redirect("/")
+
+@app.route("/login",methods=["POST"])
+def login():
+    username = request.form["username"]
+    password = request.form["password"]
+
+    session["username"] = username
+    return redirect("/")
+
+@app.route("/logout")
+def logout():
+    del session["username"]
     return redirect("/")
