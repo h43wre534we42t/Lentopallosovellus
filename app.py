@@ -38,7 +38,7 @@ def court(court_id):
 
 @app.route("/reserve/<int:court_id>")
 def reserve(court_id):
-    return render_template("reserve", {"court_id":court_id})
+    return render_template("reserve.html", court_id=court_id)
 
 @app.route("/reservesend/<int:court_id>", methods=["POST"])
 def reservesend(court_id):
