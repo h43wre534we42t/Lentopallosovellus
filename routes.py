@@ -1,6 +1,6 @@
 from app import app
 from db import db
-from flask import redirect, render_template, request, session
+from flask import redirect, render_template, request, session, flash
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.sql import text
 from os import getenv
@@ -53,11 +53,43 @@ def reservesend(court_id):
 def login():
     username = request.form["username"]
     password = request.form["password"]
+    
+    sql = text("SELECT * FROM users WHERE username = :username AND password = :password")
+    is_user = db.session.execute(sql, {"username":username, "password":password}).fetchone()
 
-    session["username"] = username
+    if is_user:
+        session["username"] = username
+    else:
+        flash("Invalid username or password")
+
     return redirect("/")
+
+@app.route("/registration")
+def registration():
+    return render_template("register.html")
+
+@app.route("/register", methods=["POST"])
+def register():
+    username = request.form["username"]
+    password = request.form["password"]
+    existing_user = db.session.execute(text("SELECT * FROM users WHERE username = :username"), {"username": username}).fetchone()
+
+    if existing_user:
+        flash("Username already exists. Please choose a different username.")
+        return redirect("/registration")
+    else:
+
+        sql = text("INSERT INTO users (username, password, is_admin) VALUES (:username, :password, false)")
+        
+        db.session.execute(sql, {"username": username, "password": password})
+        db.session.commit()
+
+        return redirect("/")
 
 @app.route("/logout")
 def logout():
     del session["username"]
     return redirect("/")
+
+
+# add groups
