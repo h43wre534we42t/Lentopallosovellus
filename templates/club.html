@@ -1,0 +1,19 @@
+<body>
+    <h1>Club members</h1>
+    <table border="1">
+        <thead>
+            <tr>
+                <th>Username</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for member in members %}
+            <tr>
+                <td>{{ member.username }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+
+<a href="/add_member_send/{{ club_id }}">Add a new member</a>

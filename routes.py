@@ -91,5 +91,39 @@ def logout():
     del session["username"]
     return redirect("/")
 
+@app.route("/clubs")
+def clubs():
+    result = db.session.execute(text("SELECT name, id FROM clubs"))
+    clubs = result.fetchall()
+    return render_template("clubs.html", clubs=clubs)
 
-# add groups
+@app.route("/clubs/<int:club_id>")
+def club(club_id):
+    sql = text("SELECT username FROM members, users, clubs WHERE members.user_id = users.id and clubs.id = :club_id and members.club_id = clubs.id")
+    members = db.session.execute(sql, {"club_id": club_id}).fetchall()
+    return render_template("club.html", members=members, club_id=club_id)
+
+@app.route("/create_club", methods=['POST'])
+def create_club():
+    name = request.form["club_name"]
+    sql = text("INSERT INTO clubs (name) VALUES (:name)")
+    db.session.execute(sql, {"name": name})
+    db.session.commit()
+    return redirect("/clubs")
+
+@app.route("/create_club_send")
+def create_club_send():
+    return render_template("create_club.html")
+
+@app.route("/add_member/<int:club_id>", methods=['POST'])
+def add_member(club_id):
+    id = request.form["user_id"]
+    sql = text("INSERT INTO members (user_id, club_id, owner) VALUES (:user_id, :club_id, false)")
+    db.session.execute(sql, {"user_id": id, "club_id": club_id})
+    db.session.commit()
+
+    return redirect("/clubs")
+
+@app.route("/add_member_send/<int:club_id>")
+def add_member_send(club_id):
+    return render_template("add_member.html", club_id=club_id)

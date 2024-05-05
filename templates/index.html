@@ -1,5 +1,5 @@
 {% if session.username %}
-<p>Olet kirjautunut nimellä {{ session.username }}</p>
+<p>You are logged in as {{ session.username }}</p>
 <a href="/logout">Kirjaudu ulos</a>
 <hr>
 <head>
@@ -16,7 +16,7 @@
     </ul>
 </body>
 </html>
-
+<a href="/clubs">All clubs
 <hr>
 <a href="/addcourt">Add court</a>
 {% else %}
